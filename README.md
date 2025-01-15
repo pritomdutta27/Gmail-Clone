@@ -16,3 +16,4 @@ This is a simple app showing list and details page to click on the list item
 * Material-Components - Material design components.
 
 <img src="../images/gmail.gif"/>
+<img src="https://media3.giphy.com/media/aUovxH8Vf9qDu/giphy.gif" width="50%" height="50%"/>
