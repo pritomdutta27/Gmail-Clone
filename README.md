@@ -23,4 +23,4 @@ This is a simple app showing list and details page to click on the list item
 * Glide - loading images.
 * Material-Components - Material design components.
 
-<img src="../images/app_image.gif"/>
+<img src="../images/gmail.gif"/>
