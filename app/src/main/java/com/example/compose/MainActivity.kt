@@ -3,10 +3,7 @@ package com.example.compose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,11 +18,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,6 +37,7 @@ import com.example.compose.view.GmailDrawerMenu
 import com.example.compose.view.HomeAppBar
 import com.example.compose.view.MailBottomMenu
 import com.example.compose.view.MailItem
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,10 +56,11 @@ class MainActivity : ComponentActivity() {
 fun GmailApp() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
-    val scrollState = rememberScrollState()
     val lazyListState = rememberLazyListState()
+    val isScrolled by remember { derivedStateOf { lazyListState.firstVisibleItemIndex > 0 } }
     val navController = rememberNavController()
-    val openDialogState = remember { mutableStateOf(false)}
+    val scrollState = rememberScrollState()
+    val openDialogState = remember { mutableStateOf(false) }
 
     ModalNavigationDrawer(
         modifier = Modifier.background(Color.White),
@@ -73,13 +72,15 @@ fun GmailApp() {
         Scaffold(
             topBar = {
                 HomeAppBar(
-                    drawerState, coroutineScope, openDialogState
+                    onDrawerToggle = { coroutineScope.launch { drawerState.open() } },
+                    openDialogState.value,
+                    onDialogChange = { openDialogState.value = it }
                 )
             },
             bottomBar = {
                 MailBottomMenu(navController)
             },
-            floatingActionButton = { FabButton(lazyListState) },
+            floatingActionButton = { FabButton(isScrolled = isScrolled)  },
             containerColor = Color.White,
         )
         { innerPadding ->
@@ -105,12 +106,11 @@ fun GmailApp() {
 @Composable
 fun MailSection(modifier: Modifier, scrollState: LazyListState) {
     LazyColumn(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         state = scrollState
     ) {
-        items(mailDataList) { data ->
-            MailItem(data, modifier)
+        items(mailDataList, key = { it.mailId }) { data ->
+            MailItem(data)
         }
     }
 }

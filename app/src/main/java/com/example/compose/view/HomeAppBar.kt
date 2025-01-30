@@ -1,6 +1,5 @@
 package com.example.compose.view
 
-import android.widget.ImageButton
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,29 +16,20 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerState
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.compose.R
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @Composable
-fun HomeAppBar(drawerState: DrawerState, coroutineScope: CoroutineScope, openDialog: MutableState<Boolean>) {
+fun HomeAppBar(onDrawerToggle: () -> Unit, openDialog: Boolean, onDialogChange: (Boolean)->Unit) {
     Box(modifier = Modifier.padding(10.dp)) {
         Card(
             modifier = Modifier.requiredHeight(50.dp),
@@ -57,8 +47,7 @@ fun HomeAppBar(drawerState: DrawerState, coroutineScope: CoroutineScope, openDia
                     .padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                IconButton(onClick = {
-                    coroutineScope.launch { drawerState.open() }}) {
+                IconButton(onClick = {onDrawerToggle()}) {
                     Icon(Icons.Default.Menu, contentDescription = "Menu")
                 }
 
@@ -72,11 +61,11 @@ fun HomeAppBar(drawerState: DrawerState, coroutineScope: CoroutineScope, openDia
                         .padding(top = 5.dp, bottom = 5.dp)
                         .clip(CircleShape)
                         .background(Color.White)
-                        .clickable { openDialog.value = true }
+                        .clickable { onDialogChange(true) }
                 )
 
-                if (openDialog.value){
-                    AccountDialog(openDialog)
+                if (openDialog){
+                    AccountDialog(onDialogChange)
                 }
             }
         }
@@ -85,10 +74,10 @@ fun HomeAppBar(drawerState: DrawerState, coroutineScope: CoroutineScope, openDia
 
 }
 
-@Preview(showBackground = true)
-@Composable
-fun HomeBarPreview() {
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val coroutineScope = rememberCoroutineScope()
-    HomeAppBar(drawerState = drawerState, coroutineScope = coroutineScope, remember { mutableStateOf(false) })
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun HomeBarPreview() {
+//    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+//    val coroutineScope = rememberCoroutineScope()
+//    HomeAppBar(drawerState = drawerState, coroutineScope = coroutineScope, remember { mutableStateOf(false) })
+//}

@@ -12,6 +12,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -19,39 +20,41 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.compose.model.DrawerMenuData
 
+private val menusDrawerList = listOf(
+    DrawerMenuData.Divider,
+    DrawerMenuData.AllInboxes,
+    DrawerMenuData.Divider,
+    DrawerMenuData.Primary,
+    DrawerMenuData.Social,
+    DrawerMenuData.Promotions,
+    DrawerMenuData.HeaderOne,
+    DrawerMenuData.Starred,
+    DrawerMenuData.Snoozed,
+    DrawerMenuData.Important,
+    DrawerMenuData.Sent,
+    DrawerMenuData.Schedule,
+    DrawerMenuData.OutBox,
+    DrawerMenuData.Drafts,
+    DrawerMenuData.AllMail,
+    DrawerMenuData.HeaderTwo,
+    DrawerMenuData.Calendar,
+    DrawerMenuData.Contacts,
+    DrawerMenuData.Divider,
+    DrawerMenuData.Settings,
+    DrawerMenuData.Help,
+)
 @Composable
 fun GmailDrawerMenu(scrollState: ScrollState) {
 
-    val menusDrawerList = listOf(
-        DrawerMenuData.Divider,
-        DrawerMenuData.AllInboxes,
-        DrawerMenuData.Divider,
-        DrawerMenuData.Primary,
-        DrawerMenuData.Social,
-        DrawerMenuData.Promotions,
-        DrawerMenuData.HeaderOne,
-        DrawerMenuData.Starred,
-        DrawerMenuData.Snoozed,
-        DrawerMenuData.Important,
-        DrawerMenuData.Sent,
-        DrawerMenuData.Schedule,
-        DrawerMenuData.OutBox,
-        DrawerMenuData.Drafts,
-        DrawerMenuData.AllMail,
-        DrawerMenuData.HeaderTwo,
-        DrawerMenuData.Calendar,
-        DrawerMenuData.Contacts,
-        DrawerMenuData.Divider,
-        DrawerMenuData.Settings,
-        DrawerMenuData.Help,
-    )
+    val scrollableModifier = remember(scrollState) {
+        Modifier.verticalScroll(scrollState)
+    }
 
     Column(
-        modifier = Modifier
+        modifier = scrollableModifier
             .fillMaxWidth(0.8f)
             .fillMaxHeight()
             .background(Color.White)
-            .verticalScroll(scrollState)
             .padding(bottom = 10.dp)
 
     ) {

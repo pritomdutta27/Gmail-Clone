@@ -42,14 +42,14 @@ import androidx.compose.ui.window.Dialog
 import com.example.compose.R
 
 @Composable
-fun AccountDialog(openDialog: MutableState<Boolean>) {
-    Dialog(onDismissRequest = { openDialog.value = false }) {
-        AccountDialogUI(Modifier, openDialog)
+fun AccountDialog(onDialogChange: (Boolean) -> Unit) {
+    Dialog(onDismissRequest = { onDialogChange(false) }) {
+        AccountDialogUI(Modifier, onDialogChange)
     }
 }
 
 @Composable
-fun AccountDialogUI(modifier: Modifier, openDialog: MutableState<Boolean>) {
+fun AccountDialogUI(modifier: Modifier, onDialogChange: (Boolean) -> Unit) {
     Card {
         Column(
             modifier
@@ -65,7 +65,7 @@ fun AccountDialogUI(modifier: Modifier, openDialog: MutableState<Boolean>) {
                         .weight(2.0f)
                 )
 
-                IconButton(onClick = { openDialog.value = false }) {
+                IconButton(onClick = { onDialogChange(false) }) {
                     Icon(
                         imageVector = Icons.Outlined.Close,
                         contentDescription = "",
